@@ -27,6 +27,9 @@ Each skill lives in its own directory. Copy the folder into your project:
 # As a skill (recommended)
 cp -r reflect /your-project/.claude/skills/reflect
 
+# Or globally, so it's available in every project
+mkdir -p ~/.claude/skills && cp -r reflect ~/.claude/skills/reflect
+
 # Or as a simple command
 cp reflect/SKILL.md /your-project/.claude/commands/reflect.md
 ```

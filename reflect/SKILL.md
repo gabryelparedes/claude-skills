@@ -34,9 +34,12 @@ Opus subagent:          Analyze patterns → check overlap → generate report
 Get the current session transcript from disk.
 
 ```bash
-# Update this path to match your Claude Code project directory
-# Claude Code stores sessions in ~/.claude/projects/<project-slug>/
-SESSION_DIR="$HOME/.claude/projects/<your-project-slug>"
+# Claude Code stores sessions in ~/.claude/projects/<project-slug>/, where the
+# slug is the project's path with every non-alphanumeric character replaced by "-"
+# (e.g. /Users/you/code/my-app -> -Users-you-code-my-app). Derive it from the cwd
+# so this skill works in any project, including from ~/.claude/skills/.
+PROJECT_SLUG=$(pwd | sed 's/[^A-Za-z0-9]/-/g')
+SESSION_DIR="$HOME/.claude/projects/$PROJECT_SLUG"
 
 # Find the main session (most recently modified)
 LATEST_JSONL=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1)
@@ -81,7 +84,7 @@ ls .claude/commands/*.md 2>/dev/null | head -30
 # Existing skills (if using skill directories)
 ls .claude/skills/*/SKILL.md 2>/dev/null | head -30
 # Memory files (if using auto-memory)
-ls ~/.claude/projects/<your-project-slug>/memory/ 2>/dev/null
+ls "$HOME/.claude/projects/$(pwd | sed 's/[^A-Za-z0-9]/-/g')/memory/" 2>/dev/null
 ```
 
 **Spawn the Agent** with `model: "opus"` and `subagent_type: "general-purpose"`:
